@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rekomendasi Ukuran Baju</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .main-card {
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .header h4 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    
+    .header .subtitle {
+      opacity: 0.9;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    .content {
+      padding: 25px 20px;
+    }
+    
+    .form-control {
+      border-radius: 12px;
+      border: 2px solid #e9ecef;
+      padding: 12px 15px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-outline-primary {
+      border: 2px solid #667eea;
+      color: #667eea;
+      border-radius: 12px;
+      padding: 8px 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline-primary:hover {
+      background: #667eea;
+      border-color: #667eea;
+      transform: translateY(-1px);
+    }
+    
+    .result {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 20px 0;
+      animation: slideIn 0.5s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .section-title {
+      color: #333;
+      font-weight: 600;
+      margin: 25px 0 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .table-container {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .table {
+      margin: 0;
+      font-size: 14px;
+    }
+    
+    .table th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 12px 8px;
+      font-size: 12px;
+    }
+    
+    .table td {
+      padding: 10px 8px;
+      vertical-align: middle;
+      border-color: #f0f0f0;
+    }
+    
+    .edit-btn {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    
+    .modal-content {
+      border-radius: 20px;
+      border: none;
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px 20px 0 0;
+    }
+    
+    .stats-card {
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 15px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .stat-value {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .bmi-indicator {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    
+    .bmi-normal { background: #d4edda; color: #155724; }
+    .bmi-underweight { background: #cce5ff; color: #004085; }
+    .bmi-overweight { background: #fff3cd; color: #856404; }
+    .bmi-obese { background: #f8d7da; color: #721c24; }
+    
+    .history-item {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #667eea;
+    }
+    
+    .toggle-section {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-section:hover {
+      color: #667eea;
+    }
+    
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .collapsible-content.show {
+      max-height: 1000px;
+    }
+    
+    @media (max-width: 576px) {
+      .container {
+        margin: 10px auto;
+        padding: 0 10px;
+      }
+      
+      .content {
+        padding: 20px 15px;
+      }
+      
+      .table th, .table td {
+        padding: 8px 4px;
+        font-size: 12px;
+      }
+      
+      .header h4 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-card">
+      <div class="header">
+        <h4><i class="fas fa-tshirt"></i> Rekomendasi Ukuran Baju</h4>
+        <div class="subtitle">Temukan ukuran yang tepat untuk Anda</div>
+      </div>
+      
+      <div class="content">
+        <form id="ukuranForm">
+          <div class="mb-3">
+            <label for="tinggi" class="form-label"><i class="fas fa-ruler-vertical"></i> Tinggi Badan (cm)</label>
+            <input type="number" class="form-control" id="tinggi" placeholder="Contoh: 170" required>
+          </div>
+          <div class="mb-3">
+            <label for="berat" class="form-label"><i class="fas fa-weight"></i> Berat Badan (kg)</label>
+            <input type="number" class="form-control" id="berat" placeholder="Contoh: 65" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-search"></i> Cek Ukuran Saya
+          </button>
+        </form>
+        
+        <div id="hasil"></div>
+        <div id="statsCard"></div>
+        
+        <div class="section-title toggle-section" onclick="toggleSection('tableSection')">
+          <i class="fas fa-table"></i> Tabel Ukuran Baju
+          <i class="fas fa-chevron-down ms-auto" id="tableChevron"></i>
+        </div>
+        <div id="tableSection" class="collapsible-content show">
+          <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <small class="text-muted">Klik tombol edit untuk mengubah data</small>
+              <button class="btn btn-outline-primary btn-sm" onclick="resetTable()">
+                <i class="fas fa-undo"></i> Reset
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Chest</th>
+                    <th>Length</th>
+                    <th>Sleeve</th>
+                    <th>Height</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="ukuranTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section-title toggle-section" onclick="toggleSection('historySection')">
+          <i class="fas fa-history"></i> Riwayat Pengecekan
+          <i class="fas fa-chevron-down ms-auto" id="historyChevron"></i>
+        </div>
+        <div id="historySection" class="collapsible-content">
+          <div id="historyList">
+            <p class="text-muted text-center">Belum ada riwayat pengecekan</p>
+          </div>
+          <button class="btn btn-outline-primary btn-sm w-100" onclick="clearHistory()">
+            <i class="fas fa-trash"></i> Hapus Semua Riwayat
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Ukuran</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editForm">
+            <input type="hidden" id="editIndex">
+            <div class="mb-3">
+              <label for="editSize" class="form-label">Size</label>
+              <input type="text" class="form-control" id="editSize" required>
+            </div>
+            <div class="mb-3">
+              <label for="editChest" class="form-label">Chest (cm)</label>
+              <input type="number" class="form-control" id="editChest" required>
+            </div>
+            <div class="mb-3">
+              <label for="editLength" class="form-label">Length (cm)</label>
+              <input type="number" class="form-control" id="editLength" required>
+            </div>
+            <div class="mb-3">
+              <label for="editSleeve" class="form-label">Sleeve (cm)</label>
+              <input type="number" class="form-control" id="editSleeve" required>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <label for="editHeightMin" class="form-label">Tinggi Min (cm)</label>
+                <input type="number" class="form-control" id="editHeightMin" required>
+              </div>
+              <div class="col-6">
+                <label for="editHeightMax" class="form-label">Tinggi Max (cm)</label>
+                <input type="number" class="form-control" id="editHeightMax" required>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-primary" onclick="saveEdit()">
+            <i class="fas fa-save"></i> Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let dataUkuran = [
+      { size: "S", chest: 50, length: 63, sleeve: 23, heightMin: 0, heightMax: 160 },
+      { size: "M", chest: 54, length: 66, sleeve: 25, heightMin: 160, heightMax: 170 },
+      { size: "L", chest: 58, length: 70, sleeve: 27, heightMin: 170, heightMax: 180 },
+      { size: "XL", chest: 62, length: 73, sleeve: 29, heightMin: 180, heightMax: 300 },
+    ];
+
+    let originalData = JSON.parse(JSON.stringify(dataUkuran));
+    let checkHistory = [];
+
+    // Render tabel ukuran
+    function renderTable() {
+      const tbody = document.getElementById("ukuranTable");
+      tbody.innerHTML = "";
+      dataUkuran.forEach((u, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${u.size}</strong></td>
+          <td>${u.chest} cm</td>
+          <td>${u.length} cm</td>
+          <td>${u.sleeve} cm</td>
+          <td>${u.heightMin}–${u.heightMax} cm</td>
+          <td>
+            <button class="btn btn-outline-primary edit-btn" onclick="openEditModal(${index})">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Buka modal edit
+    function openEditModal(index) {
+      const item = dataUkuran[index];
+      document.getElementById("editIndex").value = index;
+      document.getElementById("editSize").value = item.size;
+      document.getElementById("editChest").value = item.chest;
+      document.getElementById("editLength").value = item.length;
+      document.getElementById("editSleeve").value = item.sleeve;
+      document.getElementById("editHeightMin").value = item.heightMin;
+      document.getElementById("editHeightMax").value = item.heightMax;
+      
+      const modal = new bootstrap.Modal(document.getElementById('editModal'));
+      modal.show();
+    }
+
+    // Simpan edit
+    function saveEdit() {
+      const index = parseInt(document.getElementById("editIndex").value);
+      const size = document.getElementById("editSize").value;
+      const chest = parseInt(document.getElementById("editChest").value);
+      const length = parseInt(document.getElementById("editLength").value);
+      const sleeve = parseInt(document.getElementById("editSleeve").value);
+      const heightMin = parseInt(document.getElementById("editHeightMin").value);
+      const heightMax = parseInt(document.getElementById("editHeightMax").value);
+
+      if (heightMin >= heightMax) {
+        alert("Tinggi minimum harus lebih kecil dari tinggi maksimum!");
+        return;
+      }
+
+      dataUkuran[index] = { size, chest, length, sleeve, heightMin, heightMax };
+      renderTable();
+      
+      const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+      modal.hide();
+    }
+
+    // Reset tabel ke data awal
+    function resetTable() {
+      if (confirm("Yakin ingin mengembalikan tabel ke data awal?")) {
+        dataUkuran = JSON.parse(JSON.stringify(originalData));
+        renderTable();
+      }
+    }
+
+    // Hitung BMI
+    function calculateBMI(tinggi, berat) {
+      const tinggiM = tinggi / 100;
+      return (berat / (tinggiM * tinggiM)).toFixed(1);
+    }
+
+    // Kategori BMI
+    function getBMICategory(bmi) {
+      if (bmi < 18.5) return { category: "Kurus", class: "bmi-underweight" };
+      if (bmi < 25) return { category: "Normal", class: "bmi-normal" };
+      if (bmi < 30) return { category: "Gemuk", class: "bmi-overweight" };
+      return { category: "Obesitas", class: "bmi-obese" };
+    }
+
+    // Logika rekomendasi ukuran yang lebih baik
+    function getUkuran(tinggi, berat) {
+      const bmi = parseFloat(calculateBMI(tinggi, berat));
+      
+      for (let u of dataUkuran) {
+        if (tinggi >= u.heightMin && tinggi <= u.heightMax) {
+          // Logika penyesuaian berdasarkan BMI
+          if (bmi < 18.5 && u.size !== "S") {
+            const smallerSize = dataUkuran.find(s => s.size === "S");
+            if (smallerSize) return `Ukuran S (disarankan karena BMI rendah)`;
+          }
+          if (bmi > 25 && ["S", "M"].includes(u.size)) {
+            const nextSize = dataUkuran.find(s => s.size === (u.size === "S" ? "M" : "L"));
+            if (nextSize) return `Ukuran ${nextSize.size} (disarankan karena BMI tinggi)`;
+          }
+          return `Ukuran ${u.size}`;
+        }
+      }
+      return "Ukuran tidak ditemukan dalam rentang data.";
+    }
+
+    // Tampilkan stats
+    function showStats(tinggi, berat, ukuran) {
+      const bmi = calculateBMI(tinggi, berat);
+      const bmiInfo = getBMICategory(parseFloat(bmi));
+      
+      const statsCard = document.getElementById("statsCard");
+      statsCard.innerHTML = `
+        <div class="stats-card">
+          <div class="stat-item">
+            <span class="stat-label">BMI Anda</span>
+            <span class="stat-value">${bmi} <span class="bmi-indicator ${bmiInfo.class}">${bmiInfo.category}</span></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Rekomendasi</span>
+            <span class="stat-value">${ukuran}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Simpan ke riwayat
+    function saveToHistory(tinggi, berat, ukuran) {
+      const now = new Date();
+      const timestamp = now.toLocaleString('id-ID');
+      
+      checkHistory.unshift({
+        tinggi,
+        berat,
+        ukuran,
+        bmi: calculateBMI(tinggi, berat),
+        timestamp
+      });
+
+      // Batasi riwayat maksimal 10 item
+      if (checkHistory.length > 10) {
+        checkHistory = checkHistory.slice(0, 10);
+      }
+      
+      renderHistory();
+    }
+
+    // Render riwayat
+    function renderHistory() {
+      const historyList = document.getElementById("historyList");
+      
+      if (checkHistory.length === 0) {
+        historyList.innerHTML = '<p class="text-muted text-center">Belum ada riwayat pengecekan</p>';
+        return;
+      }
+
+      historyList.innerHTML = checkHistory.map(item => `
+        <div class="history-item">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong>${item.ukuran}</strong>
+              <div class="text-muted" style="font-size: 0.85rem;">
+                Tinggi: ${item.tinggi} cm | Berat: ${item.berat} kg | BMI: ${item.bmi}
+              </div>
+            </div>
+            <small class="text-muted">${item.timestamp}</small>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Hapus riwayat
+    function clearHistory() {
+      if (confirm("Yakin ingin menghapus semua riwayat?")) {
+        checkHistory = [];
+        renderHistory();
+      }
+    }
+
+    // Toggle section
+    function toggleSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const chevron = document.getElementById(sectionId.replace('Section', 'Chevron'));
+      
+      section.classList.toggle('show');
+      if (chevron) {
+        chevron.style.transform = section.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    }
+
+    // Event form
+    document.getElementById("ukuranForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const tinggi = parseInt(document.getElementById("tinggi").value);
+      const berat = parseInt(document.getElementById("berat").value);
+      
+      if (tinggi < 100 || tinggi > 250) {
+        alert("Tinggi badan harus antara 100-250 cm");
+        return;
+      }
+      
+      if (berat < 30 || berat > 200) {
+        alert("Berat badan harus antara 30-200 kg");
+        return;
+      }
+      
+      const ukuran = getUkuran(tinggi, berat);
+      
+      document.getElementById("hasil").innerHTML = `
+        <div class="result">
+          <i class="fas fa-check-circle"></i> ${ukuran}
+        </div>
+      `;
+      
+      showStats(tinggi, berat, ukuran);
+      saveToHistory(tinggi, berat, ukuran);
+    });
+
+    // Inisialisasi
+    renderTable();
+    renderHistory();
+  </script>
+</body>
+</html>
